@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Generator • Free QR Code Maker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-violet-950 text-slate-200 font-sans">
+  <div class="max-w-md mx-auto px-4 py-10 space-y-6">
+
+    <!-- Header -->
+    <div class="text-center space-y-2">
+      <div class="w-16 h-16 mx-auto bg-gradient-to-r from-violet-500 to-indigo-600 rounded-2xl shadow-2xl flex items-center justify-center text-3xl">📱</div>
+      <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">QR Generator</h1>
+      <p class="text-slate-400 text-sm">Free. Instant. No ads. No login.</p>
+    </div>
+
+    <!-- Type selector -->
+    <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-2 grid grid-cols-4 gap-1">
+      <button onclick="setType('url')"     id="typeUrl"     class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all bg-violet-600 text-white">🔗 URL</button>
+      <button onclick="setType('wifi')"    id="typeWifi"    class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all text-slate-400">📶 WiFi</button>
+      <button onclick="setType('contact')" id="typeContact" class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all text-slate-400">👤 Contact</button>
+      <button onclick="setType('text')"    id="typeText"    class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all text-slate-400">📝 Text</button>
+    </div>
+
+    <!-- Input card -->
+    <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl space-y-4">
+
+      <!-- URL -->
+      <div id="panelUrl">
+        <label class="block text-xs text-slate-400 mb-1">Website URL</label>
+        <input id="inputUrl" type="url" placeholder="https://yoursite.com"
+          class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+      </div>
+
+      <!-- WiFi -->
+      <div id="panelWifi" class="hidden space-y-3">
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Network name (SSID)</label>
+          <input id="wifiSsid" type="text" placeholder="MyHomeWiFi"
+            class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Password</label>
+          <input id="wifiPass" type="text" placeholder="WiFi password"
+            class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-2">Security</label>
+          <div class="flex gap-2">
+            <button onclick="setWifiSec('WPA')" id="secWPA" class="sec-btn flex-1 py-2 rounded-xl border text-sm font-semibold transition-all border-violet-500 bg-violet-600/30 ring-2 ring-violet-500">WPA/WPA2</button>
+            <button onclick="setWifiSec('WEP')" id="secWEP" class="sec-btn flex-1 py-2 rounded-xl border text-sm font-semibold transition-all border-white/20 bg-white/5">WEP</button>
+            <button onclick="setWifiSec('')"    id="secNone" class="sec-btn flex-1 py-2 rounded-xl border text-sm font-semibold transition-all border-white/20 bg-white/5">None</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div id="panelContact" class="hidden space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">First name</label>
+            <input id="contactFirst" type="text" placeholder="John"
+              class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Last name</label>
+            <input id="contactLast" type="text" placeholder="Doe"
+              class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Phone</label>
+          <input id="contactPhone" type="tel" placeholder="+372 555 1234"
+            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Email</label>
+          <input id="contactEmail" type="email" placeholder="john@email.com"
+            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
+        </div>
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Website (optional)</label>
+          <input id="contactWeb" type="url" placeholder="https://johndoe.com"
+            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div id="panelText" class="hidden">
+        <label class="block text-xs text-slate-400 mb-1">Any text or message</label>
+        <textarea id="inputText" rows="4" placeholder="Type anything..."
+          class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none resize-none"></textarea>
+      </div>
+
+      <!-- Colors -->
+      <div class="flex gap-4 items-center pt-2">
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-slate-400">QR color</label>
+          <input id="colorFg" type="color" value="#ffffff"
+            class="w-10 h-10 rounded-xl border border-white/20 cursor-pointer bg-transparent">
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-slate-400">Background</label>
+          <input id="colorBg" type="color" value="#0f172a"
+            class="w-10 h-10 rounded-xl border border-white/20 cursor-pointer bg-transparent">
+        </div>
+        <div class="flex items-center gap-2 ml-auto">
+          <label class="text-xs text-slate-400">Size</label>
+          <select id="qrSize" class="p-2 bg-slate-800 border border-white/20 rounded-xl text-white text-xs focus:outline-none">
+            <option value="200">Small</option>
+            <option value="300" selected>Medium</option>
+            <option value="400">Large</option>
+          </select>
+        </div>
+      </div>
+
+      <button onclick="generateQR()" class="w-full py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 rounded-2xl font-bold text-lg shadow-2xl transition-all">
+        Generate QR →
+      </button>
+    </div>
+
+    <!-- QR Output -->
+    <div id="outputCard" class="hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
+      <div class="flex justify-center">
+        <div id="qrCanvas" class="rounded-2xl overflow-hidden p-4 inline-block"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="downloadQR()" class="py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 rounded-2xl font-bold transition-all text-sm">
+          💾 Download PNG
+        </button>
+        <button onclick="shareQR()" class="py-4 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 rounded-2xl font-bold transition-all text-sm">
+          📤 Share image
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-500 text-center">Generated locally — your data never leaves your device</p>
+    </div>
+
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
