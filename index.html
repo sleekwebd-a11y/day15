@@ -3,144 +3,188 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>QR Generator • Free QR Code Maker</title>
+  <title>NationForge • Build & Survive 200 Years</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-violet-950 text-slate-200 font-sans">
-  <div class="max-w-md mx-auto px-4 py-10 space-y-6">
+<div class="max-w-2xl mx-auto px-4 py-10 space-y-6">
 
-    <!-- Header -->
-    <div class="text-center space-y-2">
-      <div class="w-16 h-16 mx-auto bg-gradient-to-r from-violet-500 to-indigo-600 rounded-2xl shadow-2xl flex items-center justify-center text-3xl">📱</div>
-      <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">QR Generator</h1>
-      <p class="text-slate-400 text-sm">Free. Instant. No ads. No login.</p>
-    </div>
+  <!-- Header -->
+  <div class="text-center space-y-2">
+    <div class="w-16 h-16 mx-auto bg-gradient-to-r from-violet-500 to-purple-600 rounded-2xl shadow-2xl flex items-center justify-center text-3xl">🏛️</div>
+    <h1 class="text-4xl font-black bg-gradient-to-r from-white to-violet-300 bg-clip-text text-transparent">NationForge</h1>
+    <p class="text-slate-400 text-sm">Design your nation. Survive 200 years. Every choice has consequences.</p>
+  </div>
 
-    <!-- Type selector -->
-    <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-2 grid grid-cols-4 gap-1">
-      <button onclick="setType('url')"     id="typeUrl"     class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all bg-violet-600 text-white">🔗 URL</button>
-      <button onclick="setType('wifi')"    id="typeWifi"    class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all text-slate-400">📶 WiFi</button>
-      <button onclick="setType('contact')" id="typeContact" class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all text-slate-400">👤 Contact</button>
-      <button onclick="setType('text')"    id="typeText"    class="type-btn py-3 rounded-2xl text-xs font-semibold transition-all text-slate-400">📝 Text</button>
-    </div>
+  <!-- SETUP -->
+  <div id="setupPanel" class="space-y-5">
 
-    <!-- Input card -->
-    <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl space-y-4">
-
-      <!-- URL -->
-      <div id="panelUrl">
-        <label class="block text-xs text-slate-400 mb-1">Website URL</label>
-        <input id="inputUrl" type="url" placeholder="https://yoursite.com"
-          class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
-      </div>
-
-      <!-- WiFi -->
-      <div id="panelWifi" class="hidden space-y-3">
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-4">
+      <h2 class="font-bold text-lg">🗺️ Your Nation</h2>
+      <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Network name (SSID)</label>
-          <input id="wifiSsid" type="text" placeholder="MyHomeWiFi"
-            class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
+          <label class="block text-xs text-slate-400 mb-1">Nation name</label>
+          <input id="nationName" type="text" placeholder="Valdoria" maxlength="24"
+            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
         </div>
         <div>
-          <label class="block text-xs text-slate-400 mb-1">Password</label>
-          <input id="wifiPass" type="text" placeholder="WiFi password"
-            class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none">
-        </div>
-        <div>
-          <label class="block text-xs text-slate-400 mb-2">Security</label>
-          <div class="flex gap-2">
-            <button onclick="setWifiSec('WPA')" id="secWPA" class="sec-btn flex-1 py-2 rounded-xl border text-sm font-semibold transition-all border-violet-500 bg-violet-600/30 ring-2 ring-violet-500">WPA/WPA2</button>
-            <button onclick="setWifiSec('WEP')" id="secWEP" class="sec-btn flex-1 py-2 rounded-xl border text-sm font-semibold transition-all border-white/20 bg-white/5">WEP</button>
-            <button onclick="setWifiSec('')"    id="secNone" class="sec-btn flex-1 py-2 rounded-xl border text-sm font-semibold transition-all border-white/20 bg-white/5">None</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Contact -->
-      <div id="panelContact" class="hidden space-y-3">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs text-slate-400 mb-1">First name</label>
-            <input id="contactFirst" type="text" placeholder="John"
-              class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
-          </div>
-          <div>
-            <label class="block text-xs text-slate-400 mb-1">Last name</label>
-            <input id="contactLast" type="text" placeholder="Doe"
-              class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs text-slate-400 mb-1">Phone</label>
-          <input id="contactPhone" type="tel" placeholder="+372 555 1234"
-            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
-        </div>
-        <div>
-          <label class="block text-xs text-slate-400 mb-1">Email</label>
-          <input id="contactEmail" type="email" placeholder="john@email.com"
-            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
-        </div>
-        <div>
-          <label class="block text-xs text-slate-400 mb-1">Website (optional)</label>
-          <input id="contactWeb" type="url" placeholder="https://johndoe.com"
-            class="w-full p-3 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none text-sm">
-        </div>
-      </div>
-
-      <!-- Text -->
-      <div id="panelText" class="hidden">
-        <label class="block text-xs text-slate-400 mb-1">Any text or message</label>
-        <textarea id="inputText" rows="4" placeholder="Type anything..."
-          class="w-full p-4 bg-white/5 border border-white/20 rounded-2xl text-white placeholder-slate-500 focus:ring-2 focus:ring-violet-500 focus:outline-none resize-none"></textarea>
-      </div>
-
-      <!-- Colors -->
-      <div class="flex gap-4 items-center pt-2">
-        <div class="flex items-center gap-2">
-          <label class="text-xs text-slate-400">QR color</label>
-          <input id="colorFg" type="color" value="#ffffff"
-            class="w-10 h-10 rounded-xl border border-white/20 cursor-pointer bg-transparent">
-        </div>
-        <div class="flex items-center gap-2">
-          <label class="text-xs text-slate-400">Background</label>
-          <input id="colorBg" type="color" value="#0f172a"
-            class="w-10 h-10 rounded-xl border border-white/20 cursor-pointer bg-transparent">
-        </div>
-        <div class="flex items-center gap-2 ml-auto">
-          <label class="text-xs text-slate-400">Size</label>
-          <select id="qrSize" class="p-2 bg-slate-800 border border-white/20 rounded-xl text-white text-xs focus:outline-none">
-            <option value="200">Small</option>
-            <option value="300" selected>Medium</option>
-            <option value="400">Large</option>
+          <label class="block text-xs text-slate-400 mb-1">Geography</label>
+          <select id="geoType" class="w-full p-3 bg-slate-800 border border-white/20 rounded-2xl text-white focus:outline-none">
+            <option value="island">🏝️ Island (safe, isolated)</option>
+            <option value="coastal">🌊 Coastal (trade, exposed)</option>
+            <option value="landlocked" >🏔️ Landlocked (secure, limited)</option>
+            <option value="border">⚔️ Bordered (risky, trade rich)</option>
           </select>
         </div>
       </div>
-
-      <button onclick="generateQR()" class="w-full py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 rounded-2xl font-bold text-lg shadow-2xl transition-all">
-        Generate QR →
-      </button>
+      <div>
+        <label class="block text-xs text-slate-400 mb-1">Starting population</label>
+        <select id="startPop" class="w-full p-3 bg-slate-800 border border-white/20 rounded-2xl text-white focus:outline-none">
+          <option value="50000">Small (50k) — harder</option>
+          <option value="500000" selected>Medium (500k)</option>
+          <option value="5000000">Large (5M) — easier</option>
+        </select>
+      </div>
     </div>
 
-    <!-- QR Output -->
-    <div id="outputCard" class="hidden bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl space-y-5">
-      <div class="flex justify-center">
-        <div id="qrCanvas" class="rounded-2xl overflow-hidden p-4 inline-block"></div>
+    <!-- Budget system -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-5">
+      <div class="flex justify-between items-center">
+        <h2 class="font-bold text-lg">⚖️ Policy Budget</h2>
+        <div class="text-right">
+          <div class="text-xs text-slate-400">Budget remaining</div>
+          <div id="budgetDisplay" class="text-2xl font-black text-emerald-300">100</div>
+        </div>
+      </div>
+      <div class="h-3 bg-white/10 rounded-full overflow-hidden">
+        <div id="budgetBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300" style="width:100%"></div>
+      </div>
+      <p class="text-xs text-slate-400">You have 100 points to distribute. Every policy costs points. Overspending causes debt. Debt causes crises.</p>
+      <div id="sliders" class="space-y-5"></div>
+    </div>
+
+    <!-- Presets -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6">
+      <h3 class="text-sm font-bold text-slate-300 mb-3">⚡ Historical presets</h3>
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <button onclick="applyPreset('nordic')"      class="py-3 px-2 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 rounded-2xl text-xs font-semibold transition-all">🇸🇪 Nordic</button>
+        <button onclick="applyPreset('singapore')"   class="py-3 px-2 bg-red-600/20 hover:bg-red-600/40 border border-red-500/30 rounded-2xl text-xs font-semibold transition-all">🇸🇬 Singapore</button>
+        <button onclick="applyPreset('libertarian')" class="py-3 px-2 bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-500/30 rounded-2xl text-xs font-semibold transition-all">🗽 Libertarian</button>
+        <button onclick="applyPreset('military')"    class="py-3 px-2 bg-orange-600/20 hover:bg-orange-600/40 border border-orange-500/30 rounded-2xl text-xs font-semibold transition-all">⚔️ Militarist</button>
+      </div>
+    </div>
+
+    <button onclick="startSimulation()" class="w-full py-5 bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 rounded-2xl font-black text-xl shadow-2xl transition-all">
+      🚀 Found Nation & Begin
+    </button>
+  </div>
+
+  <!-- SIMULATION -->
+  <div id="simPanel" class="hidden space-y-5">
+
+    <!-- Nation bar -->
+    <div id="nationBar" class="bg-gradient-to-r from-violet-900/50 to-purple-900/50 border border-violet-500/30 rounded-3xl p-5 shadow-2xl">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h2 id="simName" class="text-2xl font-black"></h2>
+          <div id="eraLabel" class="text-violet-300 text-xs font-semibold mt-1 uppercase tracking-wider"></div>
+        </div>
+        <div class="text-right">
+          <div id="simYear" class="text-3xl font-black text-white"></div>
+          <div id="simYearNum" class="text-xs text-slate-400"></div>
+        </div>
       </div>
 
+      <!-- Progress -->
+      <div class="h-1.5 bg-white/10 rounded-full overflow-hidden mb-4">
+        <div id="simProgress" class="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full transition-all duration-700" style="width:0%"></div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="grid grid-cols-4 gap-2">
+        <div class="bg-black/30 rounded-2xl p-3 text-center">
+          <div id="sGDP"    class="text-base font-black text-emerald-300">-</div>
+          <div class="text-xs text-slate-500 mt-0.5">GDP/cap</div>
+        </div>
+        <div class="bg-black/30 rounded-2xl p-3 text-center">
+          <div id="sPop"    class="text-base font-black text-blue-300">-</div>
+          <div class="text-xs text-slate-500 mt-0.5">Population</div>
+        </div>
+        <div class="bg-black/30 rounded-2xl p-3 text-center">
+          <div id="sHappy"  class="text-base font-black text-yellow-300">-</div>
+          <div class="text-xs text-slate-500 mt-0.5">Happiness</div>
+        </div>
+        <div class="bg-black/30 rounded-2xl p-3 text-center">
+          <div id="sStab"   class="text-base font-black text-purple-300">-</div>
+          <div class="text-xs text-slate-500 mt-0.5">Stability</div>
+        </div>
+      </div>
+
+      <!-- Secondary stats -->
+      <div class="grid grid-cols-3 gap-2 mt-2">
+        <div class="bg-black/20 rounded-xl p-2 text-center">
+          <div id="sDebt"   class="text-sm font-bold text-rose-300">-</div>
+          <div class="text-xs text-slate-500">Debt/GDP</div>
+        </div>
+        <div class="bg-black/20 rounded-xl p-2 text-center">
+          <div id="sMil"    class="text-sm font-bold text-orange-300">-</div>
+          <div class="text-xs text-slate-500">Military</div>
+        </div>
+        <div class="bg-black/20 rounded-xl p-2 text-center">
+          <div id="sEnv"    class="text-sm font-bold text-green-300">-</div>
+          <div class="text-xs text-slate-500">Environment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Crisis banner -->
+    <div id="crisisBanner" class="hidden border-2 border-red-500 bg-red-950/50 rounded-3xl p-5 text-center space-y-2">
+      <div class="text-3xl" id="crisisIcon"></div>
+      <div id="crisisTitle" class="text-xl font-black text-red-300"></div>
+      <div id="crisisDesc"  class="text-sm text-slate-300"></div>
+      <div id="crisisEffect" class="text-xs text-red-400 font-semibold"></div>
+    </div>
+
+    <!-- Charts -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6 space-y-5">
+      <h3 class="font-bold text-sm text-slate-300 uppercase tracking-wider">📈 200-Year History</h3>
+      <canvas id="chartGDP"   height="90"></canvas>
+      <canvas id="chartHappy" height="90"></canvas>
+      <canvas id="chartStab"  height="90"></canvas>
+    </div>
+
+    <!-- Chronicle -->
+    <div class="bg-white/5 border border-white/10 rounded-3xl p-6">
+      <h3 class="font-bold text-sm text-slate-300 uppercase tracking-wider mb-4">📰 Chronicle</h3>
+      <div id="chronicle" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+    </div>
+
+    <!-- Collapse / Game over / Final -->
+    <div id="collapseCard" class="hidden bg-red-950/60 border border-red-500/50 rounded-3xl p-6 text-center space-y-4">
+      <div class="text-6xl">💀</div>
+      <h3 class="text-2xl font-black text-red-300">Nation Collapsed</h3>
+      <div id="collapseReason" class="text-slate-300 text-sm"></div>
       <div class="grid grid-cols-2 gap-3">
-        <button onclick="downloadQR()" class="py-4 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 rounded-2xl font-bold transition-all text-sm">
-          💾 Download PNG
-        </button>
-        <button onclick="shareQR()" class="py-4 bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 rounded-2xl font-bold transition-all text-sm">
-          📤 Share image
-        </button>
+        <button onclick="shareResult()" class="py-3 bg-white/10 rounded-2xl font-bold text-sm">🔗 Share</button>
+        <button onclick="resetSim()"    class="py-3 bg-red-600 hover:bg-red-700 rounded-2xl font-bold text-sm">🔄 Try again</button>
       </div>
+    </div>
 
-      <p class="text-xs text-slate-500 text-center">Generated locally — your data never leaves your device</p>
+    <div id="finalCard" class="hidden bg-gradient-to-br from-violet-900/50 to-purple-900/50 border border-violet-400/30 rounded-3xl p-6 space-y-5">
+      <div class="text-center">
+        <div class="text-5xl mb-2">🏆</div>
+        <h3 class="text-2xl font-black">200 Years Survived</h3>
+      </div>
+      <div id="finalContent" class="space-y-3"></div>
+      <div class="grid grid-cols-2 gap-3">
+        <button onclick="shareResult()" class="py-4 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl font-bold text-sm">🔗 Share nation</button>
+        <button onclick="resetSim()"    class="py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl font-bold text-sm">🔄 Play again</button>
+      </div>
     </div>
 
   </div>
-  <script src="app.js"></script>
+</div>
+<script src="app.js"></script>
 </body>
 </html>
